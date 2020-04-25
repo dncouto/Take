@@ -70,7 +70,7 @@ namespace ClientChat.Service
                 string text = string.Empty;
                 for (int i = startMsg; i < parts.Length; i++)
                 {
-                    text += parts[i];
+                    text += parts[i] + " ";
                 }
                 
                 switch (command.ToUpper().Trim())
@@ -91,10 +91,10 @@ namespace ClientChat.Service
 
         private async Task<string> SendMessageAsync(MessageDTO messageData)
         {
-            string errors = string.Empty;
-            if (!validateMessage(messageData, out errors))
+            string error = string.Empty;
+            if (!validateMessage(messageData, out error))
             {
-                return errors;
+                return error;
             }
 
             HttpResponseMessage response = await PostAsync("message/send", messageData);
