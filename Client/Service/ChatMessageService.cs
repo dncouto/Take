@@ -49,13 +49,21 @@ namespace ClientChat.Service
         public bool UserAlreadyExists(string nickName, out List<string> userList)
         {
             userList = null;
-            HttpResponseMessage response = base.Get("connection/exists?nickname=" + nickName);
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                var jsonString = response.Content.ReadAsStringAsync().Result;
-                userList = JsonConvert.DeserializeObject<List<string>>(jsonString);
+                HttpResponseMessage response = base.Get("connection/exists?nickname=" + nickName);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var jsonString = response.Content.ReadAsStringAsync().Result;
+                    userList = JsonConvert.DeserializeObject<List<string>>(jsonString);
+                }
+                return response.StatusCode != System.Net.HttpStatusCode.OK;
             }
-            return response.StatusCode != System.Net.HttpStatusCode.OK;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nCONNECT SERVER ERROR - {ex.Message}");
+                return true;
+            }
         }
 
         public async Task<string> ProcessCommand(string nickNameOrigin, string commandLine)

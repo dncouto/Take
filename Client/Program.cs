@@ -12,6 +12,7 @@ namespace ClientChat
 
         static void Main()
         {
+            Console.Clear();
             ConnectChat();
             RunPromptCommands();
         }
@@ -29,6 +30,8 @@ namespace ClientChat
                 {
                     switch (command.ToUpper().Trim())
                     {
+                        case "-FECHAR":
+                            break;
                         case "-SAIR":
                             ExitChat();
                             break;
