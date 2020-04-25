@@ -25,7 +25,7 @@ namespace ClientChat
             try
             {
                 Socket = new ClientWebSocket();
-                Console.WriteLine("\nEntrando na sala...");
+                Console.WriteLine("\nEntrando no chat...");
                 await Socket.ConnectAsync(new Uri(socketConnection + nickName), CancellationToken.None);
 
                 ActiveSocket = true;
@@ -41,7 +41,7 @@ namespace ClientChat
 
         public static async Task StopAsync()
         {
-            Console.WriteLine($"\nSaindo da sala...\n");
+            Console.WriteLine($"\nSaindo do chat...\n");
             if (Socket == null || Socket.State != WebSocketState.Open) 
                 return;
             await Socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
@@ -107,12 +107,12 @@ namespace ClientChat
                 ActiveSocket = false;
                 if (error)
                 {
-                    Console.WriteLine($"\nConexão perdida com a sala!\n");
+                    Console.WriteLine($"\nConexão perdida com o chat!\n");
                     Console.WriteLine($"Pressione ENTER para conetar novamente...\n");
                 }
                 else
                 {
-                    Console.WriteLine($"\nVocê saiu da sala!\n");
+                    Console.WriteLine($"\nVocê saiu do chat!\n");
                 }
             }
         }

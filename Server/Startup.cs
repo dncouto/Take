@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProvaTake.Service;
-using ProvaTake.Service.Intf;
+using ServerChat.Service;
+using ServerChat.Service.Intf;
 using System;
 
-namespace ProvaTake
+namespace ServerChat
 {
     public class Startup
     {
@@ -21,7 +21,8 @@ namespace ProvaTake
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConnectionManagerService, ConnectionManagerService>();
-            
+            services.AddSingleton<IMessageProducerService, MessageProducerService>();
+
             services.AddMvc();
             services.AddControllers();
         }

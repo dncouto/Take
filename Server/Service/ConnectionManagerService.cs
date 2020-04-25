@@ -1,30 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
-using ProvaTake.Data;
-using ProvaTake.Service.Intf;
+using ServerChat.Service.Intf;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProvaTake.Service
+namespace ServerChat.Service
 {
     public class ConnectionManagerService : IConnectionManagerService
     {
-        public IEnumerable<TopicArea> GetAllTopicAreas()
-        {
-            return new List<TopicArea>
-            {
-                new TopicArea {Name =".NET Core" },
-                new TopicArea {Name ="Docker" },
-                new TopicArea { Name ="C#" }
-            };
-        }
-
-
         private ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
 
         public async Task ConnectChat(WebSocketManager webSocketManager, string nickName)
@@ -37,7 +24,7 @@ namespace ProvaTake.Service
                 _sockets.AddOrUpdate(nickName, webSocket, (key, oldValue) => webSocket);
             }
 
-            await SendMessageEveryOne($"\n{nickName} entrou na sala...\n");
+            await SendMessageEveryOne($"{nickName} entrou no chat...\n");
 
             PingClient(webSocket, nickName);
         }
@@ -53,16 +40,11 @@ namespace ProvaTake.Service
                                             statusDescription: "Closed by the ConnectionManager",
                                             cancellationToken: CancellationToken.None);
                 }
-                await SendMessageEveryOne($"\n{nickName} saiu da sala!\n");
+                await SendMessageEveryOne($"\n{nickName} saiu do chat!\n");
             }
         }
 
         public async Task SendMessageEveryOne(string message)
-        {
-            await SendMessageEveryOne(message, null);
-        }
-
-        public async Task SendMessageEveryOne(string message, string nickName)
         {
             ConcurrentDictionary<string, WebSocket> allUsers = GetAllSockets();
             foreach (WebSocket webSocket in allUsers.Values)

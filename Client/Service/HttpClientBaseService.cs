@@ -18,8 +18,14 @@ namespace ClientChat.Service
 
         protected async Task<HttpResponseMessage> GetAsync(string path)
         {
-            return clientHttp.GetAsync(path).Result;
+            return await clientHttp.GetAsync(path);
             
+        }
+
+        protected HttpResponseMessage Get(string path)
+        {
+            return clientHttp.GetAsync(path).Result;
+
         }
     }
 }

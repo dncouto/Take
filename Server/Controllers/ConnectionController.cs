@@ -1,18 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using ProvaTake.Data;
-using ProvaTake.Service.Intf;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServerChat.Service.Intf;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProvaTake.Controllers
+namespace ServerChat.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -37,12 +29,11 @@ namespace ProvaTake.Controllers
             {
                 if (connectionManagerService.GetSocketByNickName(nickName) != null)
                 {
+                    context.Response.StatusCode = 401;
                     throw new WebSocketException("Este apelido já está em uso!");
-                    //context.Response.Body = new MemoryStream(Encoding.UTF8.GetBytes("Este apelido já está em uso!" ?? ""));
                 }
                 
                 connectionManagerService.ConnectChat(context.WebSockets, nickName);
-
             }
             else
             {
@@ -60,9 +51,19 @@ namespace ProvaTake.Controllers
         }
 
         [HttpGet("users")]
-        public IEnumerable<string> GetAllUsers()
+        public ActionResult<IEnumerable<string>> GetAllUsers()
         {
-            return  connectionManagerService.GetAllSockets().Keys;
+            return Ok(connectionManagerService.GetAllSockets().Keys);
+        }
+
+        [HttpGet("exists")]
+        public ActionResult<IEnumerable<string>> GetUserExists(string nickName)
+        {
+            if (connectionManagerService.GetSocketByNickName(nickName) != null)
+            {
+                return BadRequest(connectionManagerService.GetAllSockets().Keys);
+            }
+            return Ok();
         }
 
     }
