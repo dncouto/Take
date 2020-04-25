@@ -1,5 +1,6 @@
 ﻿using ServerChat.Model;
 using ServerChat.Service.Intf;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,8 +8,6 @@ namespace ServerChat.Service
 {
     public class MessageProducerService : IMessageProducerService
     {
-        private MessageProducerService() { }
-
         public List<string> GetAllCommands()
         {
             return new List<string>()
@@ -25,15 +24,28 @@ namespace ServerChat.Service
 
         public async Task<(bool, string)> SendMessage(IConnectionManagerService connectionManagerService, MessageDTO message)
         {
-            if (message.Private)
-            {
-                string formatedMessage = $"De {message.From} para {message.To} : {message.Message}";
-                await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
+            if (message.To != null && connectionManagerService.GetSocketByNickName(message.To) == null){
+                return (false, "Destinatário inválido ou não está mais no chat!");
             }
             else
             {
-                string formatedMessage = $"De {message.From} para {message.To ?? "TODOS"} : {message.Message}";
-                await connectionManagerService.SendMessageEveryOne(formatedMessage);
+                try
+                {
+                    if (message.Private)
+                    {
+                        string formatedMessage = $"De {message.From} para {message.To} : {message.Message}";
+                        await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
+                    }
+                    else
+                    {
+                        string formatedMessage = $"De {message.From} para {message.To ?? "TODOS"} : {message.Message}";
+                        await connectionManagerService.SendMessageEveryOne(formatedMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return (false, ex.Message);
+                }
             }
 
             return (true, "SUCCESS");

@@ -57,14 +57,14 @@ namespace ClientChat.Service
             return response.StatusCode != System.Net.HttpStatusCode.OK;
         }
 
-        public string ProcessCommand(string commandLine)
+        public string ProcessCommand(string nickNameOrigin, string commandLine)
         {
             if (commandLine.StartsWith('-'))
             {
                 if (commandLine.Contains(' '))
                 {
                     string command = commandLine.Substring(2, commandLine.IndexOf(" ")-1);
-                    string message = commandLine.Substring(commandLine.IndexOf(" "));
+                    string text = commandLine.Substring(commandLine.IndexOf(" "));
                     switch (command.ToUpper().Trim())
                     {
                         case "TODOS":

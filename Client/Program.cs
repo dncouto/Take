@@ -40,7 +40,7 @@ namespace ClientChat
                             PrintList("Comandos disponíveis no chat:", ChatMessageService.Instance.ListAllCommands());
                             break;
                         default:
-                            Console.WriteLine(ChatMessageService.Instance.ProcessCommand(command));
+                            Console.WriteLine(ChatMessageService.Instance.ProcessCommand(NickName, command));
                             if (!WebsocketClientService.ActiveSocket)
                                 ConnectChat();
                             break;
