@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Take/v16/.suo
+/Client/bin/Debug/netcoreapp3.1
+/Client/obj/Debug/netcoreapp3.1
+/Client/obj/Release/netcoreapp3.1
+/Client/obj
+/Server/bin/Debug/netcoreapp3.1
+/Server/obj
+/.vs/Take/config
+/.vs/slnx.sqlite
