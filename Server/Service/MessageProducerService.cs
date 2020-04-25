@@ -15,6 +15,7 @@ namespace ServerChat.Service
                 "-AJUDA => Lista comandos disponíveis",
                 "-LISTAR => Lista todos os usuários conectados no chat",
                 "-TODOS [mensagem] => Envia a mensagem com destino a todos os usuários do chat",
+                "[mensagem] => Envia a mensagem com destino a todos os usuários do chat",
                 "-PARA -[apelido destinatário] [mensagem] => Define o destinatário da mensagem, mas todos podem ver",
                 "-PRIVADO -[apelido destinatário] [mensagem]=> Define o destinatário da mensagem e somente ele vê",
                 "-SAIR =>  Sai do chat, permitindo trocar de apelido e entrar novamente",
@@ -33,12 +34,12 @@ namespace ServerChat.Service
                 {
                     if (message.Private)
                     {
-                        string formatedMessage = $"De {message.From} para {message.To} : {message.Message}";
+                        string formatedMessage = $"{message.From} disse SOMENTE para {message.To}: {message.Message}";
                         await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
                     }
                     else
                     {
-                        string formatedMessage = $"De {message.From} para {message.To ?? "TODOS"} : {message.Message}";
+                        string formatedMessage = $"{message.From} disse para {message.To ?? "TODOS"}: {message.Message}";
                         await connectionManagerService.SendMessageEveryOne(formatedMessage);
                     }
                 }

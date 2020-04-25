@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ClientChat.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -36,7 +37,7 @@ namespace ClientChat.Service
         public List<string> ListAllCommands()
         {
             List<string> users = null;
-            HttpResponseMessage response = base.Get("message/help");
+            HttpResponseMessage response = Get("message/help");
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = response.Content.ReadAsStringAsync().Result;
@@ -57,25 +58,49 @@ namespace ClientChat.Service
             return response.StatusCode != System.Net.HttpStatusCode.OK;
         }
 
-        public string ProcessCommand(string nickNameOrigin, string commandLine)
+        public async Task<string> ProcessCommand(string nickNameOrigin, string commandLine)
         {
-            if (commandLine.StartsWith('-'))
+            commandLine = commandLine.Trim();
+            if (commandLine.StartsWith('-') && commandLine.Contains(' '))
             {
-                if (commandLine.Contains(' '))
+                string[] parts = commandLine.Split(' ');
+                string command = parts[0].Substring(1);
+                string recipient = parts[1].StartsWith('-') ? parts[1].Substring(1) : null;
+                int startMsg = (String.IsNullOrEmpty(recipient) ? 1 : 2);
+                string text = string.Empty;
+                for (int i = startMsg; i < parts.Length; i++)
                 {
-                    string command = commandLine.Substring(2, commandLine.IndexOf(" ")-1);
-                    string text = commandLine.Substring(commandLine.IndexOf(" "));
-                    switch (command.ToUpper().Trim())
-                    {
-                        case "TODOS":
-
-                            break;
-                        default:
-                            break;
-                    }
+                    text += parts[i];
+                }
+                
+                switch (command.ToUpper().Trim())
+                {
+                    case "TODOS":
+                        return await SendMessageAsync(MessageDTO.Build(false, nickNameOrigin, null, text));
+                    case "PARA":
+                        return await SendMessageAsync(MessageDTO.Build(false, nickNameOrigin, recipient, text));
+                    case "PRIVADO":
+                        return await SendMessageAsync(MessageDTO.Build(true, nickNameOrigin, recipient, text));
+                    default:
+                        return "Comando inválido! Use o comando -AJUDA para obter a lista de comandos válidos...;";
                 }
             }
-            return "Comando inválido! Use o comando -AJUDA para obter a lista de comandos válidos...;";
+
+            return await SendMessageAsync(MessageDTO.Build(false, nickNameOrigin, null, commandLine));
+        }
+
+        private async Task<string> SendMessageAsync(MessageDTO messageData)
+        {
+            if (String.IsNullOrEmpty(messageData.Message))
+                return "Mensagem não pode ser vazia!";
+
+            HttpResponseMessage response = await PostAsync("message/send", messageData);
+            if (!response.IsSuccessStatusCode)
+            {
+                var jsonString = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<string>(jsonString);
+            }
+            return string.Empty;
         }
     }
 }
