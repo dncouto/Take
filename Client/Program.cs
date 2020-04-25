@@ -21,7 +21,6 @@ namespace ClientChat
             string command = string.Empty;
             while (!command.ToUpper().Trim().Equals("-FECHAR"))
             {
-                Console.WriteLine("");
                 command = Console.ReadLine();
 
                 if (string.IsNullOrEmpty(command)) continue;

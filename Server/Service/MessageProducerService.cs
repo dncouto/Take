@@ -43,12 +43,12 @@ namespace ServerChat.Service
                     {
                         return (false, "Para mensagens privada o destinatário é OBRIGATÓRIO!");
                     }
-                    string formatedMessage = $"{message.From} disse SOMENTE para {message.To}: {message.Message}";
+                    string formatedMessage = $"[{message.From}] disse SOMENTE para [{message.To}]: {message.Message}";
                     await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
                 }
                 else
                 {
-                    string formatedMessage = $"{message.From} disse para {message.To ?? "TODOS"}: {message.Message}";
+                    string formatedMessage = $"[{message.From}] disse para [{message.To ?? "TODOS"}]: {message.Message}";
                     await connectionManagerService.SendMessageEveryOne(formatedMessage);
                 }
             }
