@@ -25,28 +25,36 @@ namespace ServerChat.Service
 
         public async Task<(bool, string)> SendMessage(IConnectionManagerService connectionManagerService, MessageDTO message)
         {
-            if (message.To != null && connectionManagerService.GetSocketByNickName(message.To) == null){
+            if (message.To != null && connectionManagerService.GetSocketByNickName(message.To) == null)
+            {
                 return (false, "Destinatário inválido ou não está mais no chat!");
             }
-            else
+
+            if (String.IsNullOrEmpty(message.Message))
             {
-                try
+                return (false, "Mensagem não pode ser vazia!");
+            }
+
+            try
+            {
+                if (message.Private)
                 {
-                    if (message.Private)
+                    if (String.IsNullOrEmpty(message.To))
                     {
-                        string formatedMessage = $"{message.From} disse SOMENTE para {message.To}: {message.Message}";
-                        await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
+                        return (false, "Para mensagens privada o destinatário é OBRIGATÓRIO!");
                     }
-                    else
-                    {
-                        string formatedMessage = $"{message.From} disse para {message.To ?? "TODOS"}: {message.Message}";
-                        await connectionManagerService.SendMessageEveryOne(formatedMessage);
-                    }
+                    string formatedMessage = $"{message.From} disse SOMENTE para {message.To}: {message.Message}";
+                    await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
                 }
-                catch (Exception ex)
+                else
                 {
-                    return (false, ex.Message);
+                    string formatedMessage = $"{message.From} disse para {message.To ?? "TODOS"}: {message.Message}";
+                    await connectionManagerService.SendMessageEveryOne(formatedMessage);
                 }
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
             }
 
             return (true, "SUCCESS");

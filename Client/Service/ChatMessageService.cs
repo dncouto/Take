@@ -91,8 +91,11 @@ namespace ClientChat.Service
 
         private async Task<string> SendMessageAsync(MessageDTO messageData)
         {
-            if (String.IsNullOrEmpty(messageData.Message))
-                return "Mensagem não pode ser vazia!";
+            string errors = string.Empty;
+            if (!validateMessage(messageData, out errors))
+            {
+                return errors;
+            }
 
             HttpResponseMessage response = await PostAsync("message/send", messageData);
             if (!response.IsSuccessStatusCode)
@@ -101,6 +104,25 @@ namespace ClientChat.Service
                 return JsonConvert.DeserializeObject<string>(jsonString);
             }
             return string.Empty;
+        }
+
+        private bool validateMessage(MessageDTO messageData, out string messageError)
+        {
+            messageError = null;
+
+            if (String.IsNullOrEmpty(messageData.Message))
+            {
+                messageError = "Mensagem não pode ser vazia!";
+                return false;
+            }
+
+            if (messageData.Private && String.IsNullOrEmpty(messageData.To))
+            {
+                messageError = "Para mensagens privada o destinatário é OBRIGATÓRIO!";
+                return false;
+            }
+           
+            return true;
         }
     }
 }
