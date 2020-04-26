@@ -34,12 +34,19 @@ Após informar seu apelido e entrar no chat você pode digitar o comando -AJUDA 
 
 Os comandos possíveis são:
 
--AJUDA => Lista comandos disponíveis",
+-AJUDA => Lista comandos disponíveis
+
 -LISTAR => Lista todos os usuários conectados no chat
+
 -TODOS [mensagem] => Envia a mensagem com destino a todos os usuários do chat
+
 [somente mensagem] => Envia a mensagem com destino a todos os usuários do chat (igual comando TODOS)
+
 -PARA -[apelido destinatário] [mensagem] => Define o destinatário da mensagem, mas todos podem ver
+
 -PRIVADO -[apelido destinatário] [mensagem]=> Define o destinatário da mensagem e somente ele vê
+
 -SAIR =>  Sai do chat, permitindo trocar de apelido e entrar novamente
+
 -FECHAR => Sai do chat, e encerra o aplicação cliente do chat
 
