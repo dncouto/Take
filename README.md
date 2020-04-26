@@ -2,6 +2,7 @@
 O projeto é divido em módulos cliente e servidor:
 
 O servidor é o projeto "ServerChat": serviço que gerencia o roteamento de mensagens do chat.
+
 O cliente é o projeto "ClientChat": aplicação console que se conecta no servidor para envio e recebimento de mensagens.
 
 Seguem abaixo instruções para execução da aplicação.
@@ -24,9 +25,12 @@ Compilar e executar o projeto "ClientChat" e seguir instruções na tela do cons
 
 ### Iniciando o servidor pelo Docker e o cliente pelo .EXE
 Server:
+
 Dentro da pasta raiz do projeto existe o arquivo "Run Server.bat" que contém os comandos para criar uma imagem no Docker, e subir um container dessa imagem. Executar este arquivo. O servidor é iniciado na porta: 3000.
 
+
 Frontend:
+
 Dentro da pasta raiz do projeto existe o arquivo "Run Client.bat" que contém os comandos para executar o BUILD e iniciar a aplicação client Console .Net. Executar este arquivo. O client inicia com o parâmetro apontando para localhost:3000.
 
 
