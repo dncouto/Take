@@ -100,6 +100,7 @@ namespace ClientChat
 
         private static void ExitChat()
         {
+            WebsocketClientService.NotifyClose();
             ChatMessageService.Instance.Disconnect(NickName).Wait();
             ConnectChat();
         }

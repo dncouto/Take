@@ -45,6 +45,7 @@ namespace ServerChat.Service
                     }
                     string formatedMessage = $"[{message.From}] disse SOMENTE para [{message.To}]: {message.Message}";
                     await connectionManagerService.SendMessagePrivate(message.To, formatedMessage);
+                    await connectionManagerService.SendMessagePrivate(message.From, formatedMessage);
                 }
                 else
                 {

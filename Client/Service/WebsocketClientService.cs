@@ -18,6 +18,13 @@ namespace ClientChat.Service
             get; private set;
         }
 
+        private static bool NotifyCloseFriendly
+        {
+            get; set;
+        }
+
+        public static void NotifyClose() { NotifyCloseFriendly = true;  }
+
         public static async Task StartAsync(string nickName)
         {
             SocketLoopTokenSource = new CancellationTokenSource();
@@ -29,6 +36,7 @@ namespace ClientChat.Service
                 await Socket.ConnectAsync(new Uri(socketConnection + nickName), CancellationToken.None);
 
                 ActiveSocket = true;
+                NotifyCloseFriendly = false;
 
                 Task.Run(async () => await Receive(Socket));
 
@@ -37,15 +45,6 @@ namespace ClientChat.Service
             {
                 Console.WriteLine($"\nSOCKET ERROR - {ex.Message}");
             }
-        }
-
-        public static async Task StopAsync()
-        {
-            Console.WriteLine($"\nSaindo do chat...\n");
-            if (Socket == null || Socket.State != WebSocketState.Open) 
-                return;
-            await Socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
-            SocketLoopTokenSource.Cancel();
         }
 
         public static WebSocketState State
@@ -97,23 +96,22 @@ namespace ClientChat.Service
             catch (WebSocketException ex)
             {
                 Console.WriteLine($"\nSOCKET ERROR - {ex.Message}");
-                error = true;
             }
             finally
             {
                 socket.Dispose();
                 socket = null;
                 SocketLoopTokenSource.Cancel();
-                ActiveSocket = false;
-                if (error)
+                if (!NotifyCloseFriendly)
                 {
                     Console.WriteLine($"\nConexão perdida com o chat!\n");
-                    Console.WriteLine($"Pressione ENTER para conetar novamente...\n");
+                    Console.WriteLine($"Pressione ENTER para tentar novamente...\n");
                 }
                 else
                 {
                     Console.WriteLine($"\nVocê saiu do chat!\n");
                 }
+                ActiveSocket = false;
             }
         }
 
