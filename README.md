@@ -11,6 +11,8 @@ Seguem abaixo instruções para execução da aplicação.
 ### Pré-requisitos
 Visual Studio ou Docker Desktop instalado no ambiente que for executar.
 
+Framework .Net Core 3.1
+
 ---
 
 ### Iniciando a aplicação pelo Visual Studio
