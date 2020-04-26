@@ -1,4 +1,4 @@
 cd client
 dotnet restore
 dotnet build
-dotnet run
+dotnet run localhost:3000

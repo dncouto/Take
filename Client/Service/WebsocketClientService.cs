@@ -8,8 +8,6 @@ namespace ClientChat.Service
 {
     public static class WebsocketClientService
     {
-        static readonly string socketConnection = "ws://localhost:3000/connection/start?nickname=";
-
         private static ClientWebSocket Socket;
         private static CancellationTokenSource SocketLoopTokenSource;
 
@@ -25,15 +23,17 @@ namespace ClientChat.Service
 
         public static void NotifyClose() { NotifyCloseFriendly = true;  }
 
-        public static async Task StartAsync(string nickName)
+        public static async Task StartAsync(string urlPort, string nickName)
         {
+            string connectStringSocket = $"ws://{urlPort}/connection/start?nickname={nickName}";
+
             SocketLoopTokenSource = new CancellationTokenSource();
 
             try
             {
                 Socket = new ClientWebSocket();
                 Console.WriteLine("\nEntrando no chat...");
-                await Socket.ConnectAsync(new Uri(socketConnection + nickName), CancellationToken.None);
+                await Socket.ConnectAsync(new Uri(connectStringSocket), CancellationToken.None);
 
                 ActiveSocket = true;
                 NotifyCloseFriendly = false;

@@ -9,10 +9,20 @@ namespace ClientChat
     class Program
     {
         private static string NickName;
+        private static string UrlPortServer;
+        private static ChatMessageService MessageService;
 
-        static void Main()
+        static void Main(string[] args)
         {
+            if (args == null || args.Length == 0)
+            {
+                Console.WriteLine("Informe uma URL:PORTA para iniciar o cliente!");
+                return;
+            }
+            UrlPortServer = args[0];
+
             Console.Clear();
+            MessageService = ChatMessageService.GetInstance(UrlPortServer);
             ConnectChat();
             RunPromptCommands();
         }
@@ -36,14 +46,14 @@ namespace ClientChat
                             ExitChat();
                             break;
                         case "-LISTAR":
-                            PrintList("Usuários no chat:", ChatMessageService.Instance.ListAllUsers());
+                            PrintList("Usuários no chat:", MessageService.ListAllUsers());
                             break;
                         case "-AJUDA":
-                            PrintList("Comandos disponíveis no chat:", ChatMessageService.Instance.ListAllCommands());
+                            PrintList("Comandos disponíveis no chat:", MessageService.ListAllCommands());
                             break;
                         default:
                             if (WebsocketClientService.ActiveSocket)
-                                Console.WriteLine(ChatMessageService.Instance.ProcessCommand(NickName, command).Result);
+                                Console.WriteLine(MessageService.ProcessCommand(NickName, command).Result);
                             else
                                 ConnectChat();
                             break;
@@ -54,7 +64,7 @@ namespace ClientChat
                     Console.WriteLine(e.Message);
                 }
             }
-            ChatMessageService.Instance.Disconnect(NickName).Wait();
+            MessageService.Disconnect(NickName).Wait();
         }
 
         private static void PrintList(String title, List<string> list)
@@ -76,7 +86,7 @@ namespace ClientChat
                     string name = Console.ReadLine();
 
                     List<string> usersAlreadyExists = null;
-                    if (ChatMessageService.Instance.UserAlreadyExists(name, out usersAlreadyExists))
+                    if (MessageService.UserAlreadyExists(name, out usersAlreadyExists))
                     {
                         if (usersAlreadyExists?.Any() ?? false)
                         {
@@ -90,7 +100,7 @@ namespace ClientChat
                         continue;
                     }
 
-                    WebsocketClientService.StartAsync(name).Wait();
+                    WebsocketClientService.StartAsync(UrlPortServer, name).Wait();
 
                     if (WebsocketClientService.State == WebSocketState.Open)
                         NickName = name;
@@ -101,7 +111,7 @@ namespace ClientChat
         private static void ExitChat()
         {
             WebsocketClientService.NotifyClose();
-            ChatMessageService.Instance.Disconnect(NickName).Wait();
+            MessageService.Disconnect(NickName).Wait();
             ConnectChat();
         }
     }

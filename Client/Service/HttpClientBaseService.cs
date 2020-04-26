@@ -11,9 +11,9 @@ namespace ClientChat.Service
     {
         protected HttpClient clientHttp = new HttpClient();
 
-        public HttpClientBaseService ()
+        public HttpClientBaseService (string urlPort)
         {
-            clientHttp.BaseAddress = new Uri("http://localhost:3000/");
+            clientHttp.BaseAddress = new Uri($"http://{urlPort}/");
             clientHttp.DefaultRequestHeaders.Accept.Clear();
             clientHttp.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

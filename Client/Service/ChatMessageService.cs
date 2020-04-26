@@ -10,12 +10,12 @@ namespace ClientChat.Service
     public class ChatMessageService : HttpClientBaseService
     {
         private static ChatMessageService instance;
-        public static ChatMessageService Instance
+        public static ChatMessageService GetInstance(string urlPort)
         {
-            get { return instance ?? (instance = new ChatMessageService()); }
+            return instance ?? new ChatMessageService(urlPort);
         }
 
-        private ChatMessageService() { }
+        private ChatMessageService(string urlPort) : base(urlPort) { }
 
         public async Task Disconnect(string nickName)
         {

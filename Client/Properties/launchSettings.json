@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ClientChat": {
+      "commandName": "Project",
+      "commandLineArgs": "localhost:3000"
+    }
+  }
+}
