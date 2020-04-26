@@ -24,12 +24,11 @@ Compilar e executar o projeto "ClientChat" e seguir instruções na tela do cons
 
 ### Iniciando o servidor pelo Docker e o cliente pelo .EXE
 Server:
-Dentro da pasta raiz do projeto existe o arquivo "Run Server.bat" que contém os comandos para criar uma imagem no Docker, e subir um container dessa imagem. Executar este arquivo.
+Dentro da pasta raiz do projeto existe o arquivo "Run Server.bat" que contém os comandos para criar uma imagem no Docker, e subir um container dessa imagem. Executar este arquivo. O servidor é iniciado na url e porta: 3000.
 
 Frontend:
-Dentro da pasta raiz do projeto existe o arquivo "Run Client.bat" que contém os comandos para executar o BUILD e iniciar a aplicação client Console .Net. Executar este arquivo.
+Dentro da pasta raiz do projeto existe o arquivo "Run Client.bat" que contém os comandos para executar o BUILD e iniciar a aplicação client Console .Net. Executar este arquivo. O client inicia com o parâmetro apontando para localhost:3000.
 
-O servidor é iniciado na url e porta: http://localhost:3000/
 
 ### Instruções para uso do chat
 Após informar seu apelido e entrar no chat você pode digitar o comando -AJUDA para listar todos os comandos disponíveis.
