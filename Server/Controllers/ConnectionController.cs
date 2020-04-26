@@ -46,8 +46,6 @@ namespace ServerChat.Controllers
         public async Task DisconnectChat(string nickName)
         {
             await connectionManagerService.DisconnectChat(nickName);
-
-            //return
         }
 
         [HttpGet("users")]

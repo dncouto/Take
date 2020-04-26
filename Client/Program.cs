@@ -24,7 +24,7 @@ namespace ClientChat
             {
                 command = Console.ReadLine();
 
-                if (string.IsNullOrEmpty(command)) continue;
+                if (WebsocketClientService.ActiveSocket && string.IsNullOrEmpty(command)) continue;
 
                 try
                 {
@@ -42,8 +42,9 @@ namespace ClientChat
                             PrintList("Comandos disponíveis no chat:", ChatMessageService.Instance.ListAllCommands());
                             break;
                         default:
-                            Console.WriteLine(ChatMessageService.Instance.ProcessCommand(NickName, command).Result);
-                            if (!WebsocketClientService.ActiveSocket)
+                            if (WebsocketClientService.ActiveSocket)
+                                Console.WriteLine(ChatMessageService.Instance.ProcessCommand(NickName, command).Result);
+                            else
                                 ConnectChat();
                             break;
                     }
