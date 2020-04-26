@@ -30,6 +30,11 @@ namespace ServerChat.Service
                 return (false, "Destinatário inválido ou não está mais no chat!");
             }
 
+            if (String.IsNullOrEmpty(message.From))
+            {
+                return (false, "O usuário que enviou a mensagem é obrigatório e não foi informado!");
+            }
+
             if (String.IsNullOrEmpty(message.Message))
             {
                 return (false, "Mensagem não pode ser vazia!");
