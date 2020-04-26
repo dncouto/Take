@@ -85,8 +85,7 @@ namespace ClientChat
                     Console.Write($"\nInforme seu Apelido: ");
                     string name = Console.ReadLine();
 
-                    List<string> usersAlreadyExists = null;
-                    if (MessageService.UserAlreadyExists(name, out usersAlreadyExists))
+                    if (MessageService.UserAlreadyExists(name, out List<string> usersAlreadyExists))
                     {
                         if (usersAlreadyExists?.Any() ?? false)
                         {

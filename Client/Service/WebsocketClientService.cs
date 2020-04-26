@@ -57,7 +57,6 @@ namespace ClientChat.Service
 
         private static async Task Receive(ClientWebSocket socket)
         {
-            bool error = false;
             var cancellationToken = SocketLoopTokenSource.Token;
             try
             {
@@ -100,7 +99,6 @@ namespace ClientChat.Service
             finally
             {
                 socket.Dispose();
-                socket = null;
                 SocketLoopTokenSource.Cancel();
                 if (!NotifyCloseFriendly)
                 {

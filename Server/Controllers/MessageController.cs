@@ -28,11 +28,11 @@ namespace ServerChat.Controllers
         [HttpPost("send")]
         public async Task<ActionResult> Send(MessageDTO message)
         {
-            (bool Success, string msgResult) result = await messageProducerService.SendMessage(connectionManagerService, message);
-            if (result.Success)
-                return Ok(result.msgResult);
+            (bool Success, string msgResult) = await messageProducerService.SendMessage(connectionManagerService, message);
+            if (Success)
+                return Ok(msgResult);
             else
-                return BadRequest(result.msgResult);
+                return BadRequest(msgResult);
         }
     }
 }

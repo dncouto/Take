@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace ClientChat.Service
 {
-    public class ChatMessageService : HttpClientBaseService
+    public sealed class ChatMessageService : HttpClientBaseService
     {
         private static ChatMessageService instance;
         public static ChatMessageService GetInstance(string urlPort)
         {
-            return instance ?? new ChatMessageService(urlPort);
+            if (instance == null)
+                instance = new ChatMessageService(urlPort);
+            return instance;
         }
 
         private ChatMessageService(string urlPort) : base(urlPort) { }
@@ -99,8 +101,7 @@ namespace ClientChat.Service
 
         private async Task<string> SendMessageAsync(MessageDTO messageData)
         {
-            string error = string.Empty;
-            if (!validateMessage(messageData, out error))
+            if (!ValidateChatMessage(messageData, out string error))
             {
                 return error;
             }
@@ -114,7 +115,7 @@ namespace ClientChat.Service
             return string.Empty;
         }
 
-        private bool validateMessage(MessageDTO messageData, out string messageError)
+        private bool ValidateChatMessage(MessageDTO messageData, out string messageError)
         {
             messageError = null;
 
