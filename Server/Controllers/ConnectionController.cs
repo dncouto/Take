@@ -20,7 +20,7 @@ namespace ServerChat.Controllers
 
         // Entra no Chat
         [HttpGet("start")]
-        public async Task ConnectChat(string nickName)
+        public async Task<IActionResult> ConnectChat(string nickName)
         {
             var context = ControllerContext.HttpContext;
             var isSocketRequest = context.WebSockets.IsWebSocketRequest;
@@ -29,15 +29,16 @@ namespace ServerChat.Controllers
             {
                 if (connectionManagerService.GetSocketByNickName(nickName) != null)
                 {
-                    context.Response.StatusCode = 401;
-                    throw new WebSocketException("Este apelido já está em uso!");
+                    return BadRequest("Este apelido já está em uso!");
                 }
                 
                 connectionManagerService.ConnectChat(context.WebSockets, nickName);
+
+                return Ok();
             }
             else
             {
-                context.Response.StatusCode = 400;
+                return BadRequest("Protocolo inválido para webSocket!");
             }
         }
 
