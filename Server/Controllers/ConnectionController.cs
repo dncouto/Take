@@ -34,7 +34,7 @@ namespace ServerChat.Controllers
                 
                 connectionManagerService.ConnectChat(context.WebSockets, nickName);
 
-                return Ok();
+                return new EmptyResult();
             }
             else
             {

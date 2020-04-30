@@ -77,9 +77,7 @@ namespace ServerChatTest
 
             // Assert
             Assert.IsNotNull(actionResult);
-            Assert.IsInstanceOf(typeof(OkResult), actionResult.Result);
-            OkResult okResult = actionResult.Result as OkResult;
-            Assert.AreEqual(okResult.StatusCode, 200);
+            Assert.IsInstanceOf(typeof(EmptyResult), actionResult.Result);
         }
 
         [Test]

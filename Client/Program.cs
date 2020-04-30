@@ -17,6 +17,7 @@ namespace ClientChat
             if (args == null || args.Length == 0)
             {
                 Console.WriteLine("Informe uma URL:PORTA para iniciar o cliente!");
+                Console.ReadLine();
                 return;
             }
             UrlPortServer = args[0];
